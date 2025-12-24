@@ -5659,6 +5659,117 @@ function MacLib:Window(Settings)
 		return out
 	end
 
+	function MacLib:Watermark(Settings)
+		local WatermarkFunctions = {}
+		local Stats = game:GetService("Stats")
+		
+		local DisplayTitle = Settings.Title or "Z3X"
+
+		local WatermarkGui = Instance.new("ScreenGui")
+		WatermarkGui.Name = "WatermarkUI"
+		WatermarkGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+		WatermarkGui.Parent = path
+
+		local MainFrame = Instance.new("TextButton")
+		MainFrame.Name = "MainFrame"
+		MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+		MainFrame.BackgroundTransparency = 0.15
+		MainFrame.BorderSizePixel = 0
+		MainFrame.AnchorPoint = Vector2.new(0.5, 1)
+		MainFrame.Position = UDim2.new(0.5, 0, 0.98, -10)
+		MainFrame.Size = UDim2.new(0, 320, 0, 34)
+		MainFrame.Active = true
+		MainFrame.Text = ""
+		MainFrame.AutoButtonColor = false
+		MainFrame.Parent = WatermarkGui
+
+		local UICorner = Instance.new("UICorner", MainFrame)
+		UICorner.CornerRadius = UDim.new(0, 6)
+
+		local UIStroke = Instance.new("UIStroke", MainFrame)
+		UIStroke.Color = Color3.fromRGB(45, 45, 45)
+		UIStroke.Thickness = 1
+
+		local Glow = Instance.new("ImageLabel", MainFrame)
+		Glow.Name = "Glow"
+		Glow.BackgroundTransparency = 1
+		Glow.Position = UDim2.new(0, -15, 0, -15)
+		Glow.Size = UDim2.new(1, 30, 1, 30)
+		Glow.ZIndex = 0
+		Glow.Image = "rbxassetid://5028857084"
+		Glow.ImageColor3 = Color3.fromRGB(20, 20, 30)
+		Glow.ImageTransparency = 0.4
+		Glow.ScaleType = Enum.ScaleType.Slice
+		Glow.SliceCenter = Rect.new(24, 24, 276, 276)
+
+		local function CreateLabel(name, pos, size, text)
+			local lbl = Instance.new("TextLabel", MainFrame)
+			lbl.Name = name
+			lbl.BackgroundTransparency = 1
+			lbl.Position = pos
+			lbl.Size = size
+			lbl.Font = Enum.Font.GothamBold
+			lbl.Text = text
+			lbl.TextColor3 = Color3.fromRGB(190, 190, 190)
+			lbl.TextSize = 13
+			lbl.TextXAlignment = Enum.TextXAlignment.Center
+			return lbl
+		end
+
+		local Title = CreateLabel("Title", UDim2.new(0, 12, 0, 0), UDim2.new(0, 55, 1, 0), DisplayTitle)
+		local Clock = CreateLabel("Clock", UDim2.new(0, 80, 0, 0), UDim2.new(0, 45, 1, 0), "")
+		local FPSLabel = CreateLabel("FPS", UDim2.new(0, 138, 0, 0), UDim2.new(0, 50, 1, 0), "")
+		local PingLabel = CreateLabel("Ping", UDim2.new(0, 208, 0, 0), UDim2.new(0, 50, 1, 0), "")
+
+		local function CreateDiv(xPos)
+			local div = Instance.new("Frame", MainFrame)
+			div.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+			div.BorderSizePixel = 0
+			div.Position = UDim2.new(0, xPos, 0.25, 0)
+			div.Size = UDim2.new(0, 1, 0.5, 0)
+		end
+		CreateDiv(72); CreateDiv(130); CreateDiv(195); CreateDiv(270)
+
+		local PlayerAvatar = Instance.new("ImageLabel", MainFrame)
+		PlayerAvatar.Name = "PlayerAvatar"
+		PlayerAvatar.BackgroundTransparency = 1
+		PlayerAvatar.AnchorPoint = Vector2.new(0, 0.5)
+		PlayerAvatar.Position = UDim2.new(0, 280, 0.5, 0)
+		PlayerAvatar.Size = UDim2.new(0, 22, 0, 22)
+		PlayerAvatar.Image = "rbxthumb://type=AvatarHeadShot&id=" .. game:GetService("Players").LocalPlayer.UserId .. "&w=100&h=100"
+		Instance.new("UICorner", PlayerAvatar).CornerRadius = UDim.new(1, 0)
+		TweenService:Create(MacLib.GetService("CoreGui").RobloxGui:WaitForChild("Backpack"):WaitForChild("Hotbar"), TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -327, 0, -30)}):Play()
+
+		local updateConnection = task.spawn(function()
+			while task.wait(1) do
+				if not WatermarkGui or not WatermarkGui.Parent then break end
+				Clock.Text = os.date("%H:%M")
+				local fps = string.split(Stats.Workspace.Heartbeat:GetValueString(), ".")[1]
+				FPSLabel.Text = "FPS: " .. (fps or "0")
+				local ping = string.split(Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), ".")[1]
+				PingLabel.Text = "PING: " .. (ping or "0")
+			end
+		end)
+
+		function WatermarkFunctions:SetVisible(State)
+			WatermarkGui.Enabled = State
+			TweenService:Create(path.RobloxGui:WaitForChild("Backpack"):WaitForChild("Hotbar"), TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -327, State and 0 or 1, State and -30 or -70)}):Play()
+		end
+
+		function WatermarkFunctions:SetTitle(NewTitle)
+			Title.Text = NewTitle
+		end
+
+		function WatermarkFunctions:Destroy()
+			if updateConnection then task.cancel(updateConnection) end
+			WatermarkGui:Destroy()
+			TweenService:Create(path.RobloxGui:WaitForChild("Backpack"):WaitForChild("Hotbar"), TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -327, 1, -70)}):Play()
+		end
+
+		return WatermarkFunctions
+	end
+
 	macLib.Enabled = false
 
 	local assetList = {}
