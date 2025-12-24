@@ -97,7 +97,7 @@ function MacLib:Watermark(Settings)
 	MainFrame.AnchorPoint = Vector2.new(0.5, 1)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.98, -10)
 	MainFrame.Size = UDim2.new(0, 320, 0, 34)
-	MainFrame.Active = true
+	MainFrame.Active = false
 	MainFrame.Text = ""
 	MainFrame.AutoButtonColor = false
 	MainFrame.Parent = WatermarkGui
