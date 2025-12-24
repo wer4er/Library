@@ -92,7 +92,7 @@ function MacLib:Watermark(Settings)
 	local MainFrame = Instance.new("TextButton")
 	MainFrame.Name = "MainFrame"
 	MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-	MainFrame.BackgroundTransparency = 0.15
+	MainFrame.BackgroundTransparency = Settings.Transparency or 0.15
 	MainFrame.BorderSizePixel = 0
 	MainFrame.AnchorPoint = Vector2.new(0.5, 1)
 	MainFrame.Position = UDim2.new(0.5, 0, 0.98, -10)
