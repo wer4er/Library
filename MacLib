@@ -164,9 +164,9 @@ function MacLib:Watermark(Settings)
 			if not WatermarkGui or not WatermarkGui.Parent then break end
 			Clock.Text = os.date("%H:%M")
 			local fps = string.split(Stats.Workspace.Heartbeat:GetValueString(), ".")[1]
-			FPSLabel.Text = "FPS: " .. (fps or "0")
+			FPSLabel.Text = "Fps: " .. (fps or "0")
 			local ping = string.split(Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), ".")[1]
-			PingLabel.Text = "PING: " .. (ping or "0")
+			PingLabel.Text = "Ping: " .. (ping or "0")
 		end
 	end)
 
