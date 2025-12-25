@@ -127,7 +127,7 @@ function MacLib:Watermark(Settings)
 		lbl.BackgroundTransparency = 1
 		lbl.Position = pos
 		lbl.Size = size
-		lbl.Font = Enum.Font.GothamBold
+		lbl.Font = "GothamBold"
 		lbl.Text = text
 		lbl.TextColor3 = Color3.fromRGB(190, 190, 190)
 		lbl.TextSize = 13
@@ -136,9 +136,9 @@ function MacLib:Watermark(Settings)
 	end
 
 	local Title = CreateLabel("Title", UDim2.new(0, 12, 0, 0), UDim2.new(0, 55, 1, 0), DisplayTitle)
-	local Clock = CreateLabel("Clock", UDim2.new(0, 80, 0, 0), UDim2.new(0, 45, 1, 0), "")
-	local FPSLabel = CreateLabel("FPS", UDim2.new(0, 138, 0, 0), UDim2.new(0, 50, 1, 0), "")
-	local PingLabel = CreateLabel("Ping", UDim2.new(0, 208, 0, 0), UDim2.new(0, 50, 1, 0), "")
+	local Clock = CreateLabel("Clock", UDim2.new(0, 80, 0, 0), UDim2.new(0, 45, 1, 0), os.date("%H:%M"))
+	local FPSLabel = CreateLabel("FPS", UDim2.new(0, 138, 0, 0), UDim2.new(0, 50, 1, 0), "Fps: " .. string.split(Stats.Workspace.Heartbeat:GetValueString(), ".")[1])
+	local PingLabel = CreateLabel("Ping", UDim2.new(0, 208, 0, 0), UDim2.new(0, 50, 1, 0), "Ping: " .. string.split(Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), ".")[1])
 
 	local function CreateDiv(xPos)
 		local div = Instance.new("Frame", MainFrame)
