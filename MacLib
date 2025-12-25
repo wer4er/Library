@@ -95,8 +95,8 @@ function MacLib:Watermark(Settings)
 	MainFrame.BackgroundTransparency = Settings.Transparency or 0.15
 	MainFrame.BorderSizePixel = 0
 	MainFrame.AnchorPoint = Vector2.new(0.5, 1)
-	MainFrame.Position = UDim2.new(0.5, 0, 0.98, -10)
-	MainFrame.Size = UDim2.new(0, 320, 0, 34)
+	MainFrame.Position = UDim2.new(0.5, 0, 0.98, 0)
+	MainFrame.Size = UDim2.new(0, 320, 0, 30)
 	MainFrame.Active = false
 	MainFrame.Text = ""
 	MainFrame.AutoButtonColor = false
