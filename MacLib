@@ -137,8 +137,8 @@ function MacLib:Watermark(Settings)
 
 	local Title = CreateLabel("Title", UDim2.new(0, 12, 0, 0), UDim2.new(0, 55, 1, 0), DisplayTitle)
 	local Clock = CreateLabel("Clock", UDim2.new(0, 80, 0, 0), UDim2.new(0, 45, 1, 0), os.date("%H:%M"))
-	local FPSLabel = CreateLabel("FPS", UDim2.new(0, 138, 0, 0), UDim2.new(0, 50, 1, 0), "Fps: " .. string.split(Stats.Workspace.Heartbeat:GetValueString(), ".")[1])
-	local PingLabel = CreateLabel("Ping", UDim2.new(0, 208, 0, 0), UDim2.new(0, 50, 1, 0), "Ping: " .. string.split(Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), ".")[1])
+	local FPSLabel = CreateLabel("FPS", UDim2.new(0, 138, 0, 0), UDim2.new(0, 50, 1, 0), "Fps: " .. math.floor(Stats.Workspace.Heartbeat:GetValue()))
+	local PingLabel = CreateLabel("Ping", UDim2.new(0, 208, 0, 0), UDim2.new(0, 50, 1, 0), "Ping: " .. math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue()))
 
 	local function CreateDiv(xPos)
 		local div = Instance.new("Frame", MainFrame)
