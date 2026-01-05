@@ -468,7 +468,7 @@ function MacLib:Window(Settings)
 
 	local globalSettingsButton = Instance.new("ImageButton")
 	globalSettingsButton.Name = "GlobalSettingsButton"
-	globalSettingsButton.Image = "rbxassetid://"..Icons:GetIcon("settings", "Lucide")
+	globalSettingsButton.Image = "rbxassetid://"..Icons:GetIcon("gear-six", "Phosphor")
 	globalSettingsButton.ImageTransparency = 0.5
 	globalSettingsButton.AnchorPoint = Vector2.new(1, 0.5)
 	globalSettingsButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1530,7 +1530,7 @@ function MacLib:Window(Settings)
 			if Settings.Image then
 				tabImage = Instance.new("ImageLabel")
 				tabImage.Name = "TabImage"
-				tabImage.Image = "rbxassetid://"..Icons:GetIcon(Settings.Image, "Lucide")
+				tabImage.Image = "rbxassetid://"..Icons:GetIcon(Settings.Image, "Phosphor")
 				tabImage.ImageTransparency = 0.5
 				tabImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				tabImage.BackgroundTransparency = 1
