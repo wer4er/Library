@@ -2508,7 +2508,7 @@ function MacLib:Window(Settings)
 					end)
 
 					UserInputService.InputBegan:Connect(function(inp, gpr)
-						if gpr then return end
+						--if gpr then return end
 						
 						if focused and not isBinding then
 							isBinding = true
