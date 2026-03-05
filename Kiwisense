@@ -796,41 +796,46 @@ local Workspace = game:GetService('Workspace');
         end
     end
 
-    local CustomFont = { } do
+    local CustomFont = {} do
         function CustomFont:New(Name, Weight, Style, Data)
-            if isfile(Library.Folders.Assets .. "/" .. Name .. ".json") then
-                return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            local folder = Library.Folders.Assets .. "/"
+            local jsonPath = folder .. Name .. ".json"
+            local ttfPath  = folder .. Name .. ".ttf"
+
+            if isfile(jsonPath) then
+                return Font.new(getcustomasset(jsonPath))
             end
 
-            if not isfile(Library.Folders.Assets .. "/" .. Name .. ".ttf") then 
-                writefile(Library.Folders.Assets .. "/" .. Name .. ".ttf", game:HttpGet(Data.Url))
+            if not isfile(ttfPath) then 
+                writefile(ttfPath, game:HttpGet(Data.Url))
             end
 
             local FontData = {
                 name = Name,
-                faces = { {
+                faces = {{
                     name = "Regular",
                     weight = Weight,
                     style = Style,
-                    assetId = getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".ttf")
-                } }
+                    assetId = getcustomasset(ttfPath)
+                }}
             }
 
-            writefile(Library.Folders.Assets .. "/" .. Name .. ".json", HttpService:JSONEncode(FontData))
-            return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            writefile(jsonPath, HttpService:JSONEncode(FontData))
+            return Font.new(getcustomasset(jsonPath))
         end
 
         function CustomFont:Get(Name)
-            if isfile(Library.Folders.Assets .. "/" .. Name .. ".json") then
-                return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            local path = Library.Folders.Assets .. "/" .. Name .. ".json"
+            if isfile(path) then
+                return Font.new(getcustomasset(path))
             end
         end
 
-        CustomFont:New("Inter", 200, "Regular", {
-            Url = "https://github.com/wer4er/Fonts/raw/refs/heads/main/JetBrainsMono-SemiBold.ttf"
+        CustomFont:New("JetBrainsMono", 500, "Regular", {
+            Url = "https://github.com/wer4er/Fonts/raw/refs/heads/main/JetBrainsMono-Medium.ttf"
         })
 
-        Library.Font = CustomFont:Get("Inter")
+        Library.Font = CustomFont:Get("JetBrainsMono")
     end
 
     local Themes = {
