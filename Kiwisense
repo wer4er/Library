@@ -188,8 +188,6 @@ local Workspace = game:GetService('Workspace');
 
     local RectNew = Rect.new
 
-    local IsMobile = UserInputService.TouchEnabled or false
-
     gethui = gethui or function()
         return CoreGui
     end
@@ -534,16 +532,6 @@ local Workspace = game:GetService('Workspace');
                 return
             end
 
-            if Event == "MouseButton1Down" or Event == "MouseButton1Click" then 
-                if IsMobile then 
-                    Event = "TouchTap"
-                end
-            elseif Event == "MouseButton2Down" or Event == "MouseButton2Click" then 
-                if IsMobile then
-                    Event = "TouchLongPress"
-                end
-            end
-
             return Library:Connect(self.Instance[Event], Callback, Name)
         end
 
@@ -584,7 +572,7 @@ local Workspace = game:GetService('Workspace');
             local Gui = self.Instance
 
             local MouseLocation = UserInputService:GetMouseLocation()
-            local RenderStepped
+            local PreRender
 
             local Newtooltip = Instances:Create("Frame", {
                 Parent = Library.Holder.Instance,
@@ -618,7 +606,7 @@ local Workspace = game:GetService('Workspace');
             local TooltipText = Instances:Create("TextLabel", {
                 Parent = Newtooltip.Instance,
                 Name = "\0",
-                Font = "GothamBlack",
+                Font = "Gotham",
                 TextColor3 = FromRGB(255, 255, 255),
                 BorderColor3 = FromRGB(0, 0, 0),
                 Text = Text,
@@ -643,7 +631,7 @@ local Workspace = game:GetService('Workspace');
                 TooltipText:Tween(nil, {TextTransparency = 0})
                 UIStroke:Tween(nil, {Transparency = 0.4})
 
-                RenderStepped = RunService.RenderStepped:Connect(function()
+                PreRender = RunService.PreRender:Connect(function()
                     MouseLocation = UserInputService:GetMouseLocation()
                     Newtooltip:Tween(nil, {Position = UDim2New(0, MouseLocation.X, 0, MouseLocation.Y - 38)})
                 end)
@@ -654,9 +642,9 @@ local Workspace = game:GetService('Workspace');
                 TooltipText:Tween(nil, {TextTransparency = 1})
                 UIStroke:Tween(nil, {Transparency = 1})
 
-                if RenderStepped then 
-                    RenderStepped:Disconnect()
-                    RenderStepped = nil
+                if PreRender then 
+                    PreRender:Disconnect()
+                    PreRender = nil
                 end
             end)
         end
@@ -1254,7 +1242,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Toggle"] = Instances:Create("TextButton", {
                     Parent = Data.Parent.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -1270,7 +1258,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Toggle"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = Data.Name,
@@ -1476,7 +1464,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Dropdown"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Data.Name,
@@ -1521,7 +1509,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Value"] = Instances:Create("TextLabel", {
                     Parent = Items["RealDropdown"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "--",
@@ -1556,7 +1544,7 @@ local Workspace = game:GetService('Workspace');
                 Items["OptionHolder"] = Instances:Create("TextButton", {
                     Parent = Library.UnusedHolder.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -1683,7 +1671,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Input"] = Instances:Create("TextBox", {
                     Parent = Items["Search"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     AnchorPoint = Vector2New(0, 0.5),
                     PlaceholderColor3 = FromRGB(185, 185, 185),
                     PlaceholderText = "Search",
@@ -1768,7 +1756,7 @@ local Workspace = game:GetService('Workspace');
                 local OptionButton = Instances:Create("TextButton", {
                     Parent = Items["Holder"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -1808,7 +1796,7 @@ local Workspace = game:GetService('Workspace');
                 local OptionText = Instances:Create("TextLabel", {
                     Parent = OptionButton.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextTransparency = 0.5,
                     AnchorPoint = Vector2New(0, 0.5),
                     ZIndex = 5,
@@ -1937,7 +1925,7 @@ local Workspace = game:GetService('Workspace');
             end
 
             local Debounce = false 
-            local RenderStepped 
+            local PreRender 
 
             function Dropdown:SetOpen(Bool)
                 if Debounce then 
@@ -1953,7 +1941,7 @@ local Workspace = game:GetService('Workspace');
                     Items["OptionHolder"].Instance.Visible = true
                     Items["Holder"].Instance.ZIndex = 11
 
-                    RenderStepped = RunService.RenderStepped:Connect(function()
+                    PreRender = RunService.PreRender:Connect(function()
                         Items["OptionHolder"].Instance.Position = UDim2New(0, Items["RealDropdown"].Instance.AbsolutePosition.X, 0, Items["RealDropdown"].Instance.AbsolutePosition.Y + 30)
                         Items["OptionHolder"].Instance.Size = UDim2New(0, Items["RealDropdown"].Instance.AbsoluteSize.X, 0, Data.MaxSize or 165)
                     end)
@@ -1970,9 +1958,9 @@ local Workspace = game:GetService('Workspace');
                         Library.OpenFrames[Data.Name] = nil
                     end
 
-                    if RenderStepped then
-                        RenderStepped:Disconnect()
-                        RenderStepped = nil
+                    if PreRender then
+                        PreRender:Disconnect()
+                        PreRender = nil
                     end
                 end
 
@@ -2040,7 +2028,7 @@ local Workspace = game:GetService('Workspace');
                     return
                 end
 
-                SearchStepped = RunService.RenderStepped:Connect(function()
+                SearchStepped = RunService.PreRender:Connect(function()
                     for Index, Value in Dropdown.Options do 
                         if StringFind(Value.Name:lower(), Items["Input"].Instance.Text:lower()) then 
                             Value.Button.Instance.Visible = true
@@ -2115,7 +2103,7 @@ local Workspace = game:GetService('Workspace');
                 Items["ColorpickerButton"] = Instances:Create("TextButton", {
                     Parent = Data.Parent.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -2229,7 +2217,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Palette"] = Instances:Create("TextButton", {
                     Parent = Items["ColorpickerWindow"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -2362,7 +2350,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Alpha"] = Instances:Create("TextButton", {
                     Parent = Items["ColorpickerWindow"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     AutoButtonColor = false,
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
@@ -2450,7 +2438,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Text"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["Dropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "animations",
@@ -2495,7 +2483,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Value"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["RealDropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "--",
@@ -2530,7 +2518,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["OptionHolder"] = Instances:Create("TextButton", {
                         Parent = DropdownItems["Dropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -2597,7 +2585,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionButton = Instances:Create("TextButton", {
                         Parent = DropdownItems["OptionHolder"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -2637,7 +2625,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionText = Instances:Create("TextLabel", {
                         Parent = OptionButton.Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextTransparency = 0.5,
                         AnchorPoint = Vector2New(0, 0.5),
                         ZIndex = 5,
@@ -2745,14 +2733,14 @@ local Workspace = game:GetService('Workspace');
                     if Bool then 
                         DropdownItems["OptionHolder"].Instance.Visible = true
 
-                        RenderStepped = RunService.RenderStepped:Connect(function()
+                        PreRender = RunService.PreRender:Connect(function()
                             DropdownItems["OptionHolder"].Instance.Position = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsolutePosition.X, 0,  DropdownItems["RealDropdown"].Instance.AbsolutePosition.Y + DropdownItems["RealDropdown"].Instance.AbsoluteSize.Y + 5)
                             DropdownItems["OptionHolder"].Instance.Size = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsoluteSize.X, 0, 85)
                         end)
                     else
-                        if RenderStepped then
-                            RenderStepped:Disconnect()
-                            RenderStepped = nil
+                        if PreRender then
+                            PreRender:Disconnect()
+                            PreRender = nil
                         end
                     end
 
@@ -3210,7 +3198,7 @@ local Workspace = game:GetService('Workspace');
                 Items["KeyButton"] = Instances:Create("TextButton", {
                     Parent = Data.Parent.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = "None",
@@ -3278,7 +3266,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Text"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["Dropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "mode",
@@ -3323,7 +3311,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Value"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["RealDropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "--",
@@ -3358,7 +3346,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["OptionHolder"] = Instances:Create("TextButton", {
                         Parent = DropdownItems["Dropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -3425,7 +3413,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionButton = Instances:Create("TextButton", {
                         Parent = DropdownItems["OptionHolder"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -3465,7 +3453,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionText = Instances:Create("TextLabel", {
                         Parent = OptionButton.Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextTransparency = 0.5,
                         AnchorPoint = Vector2New(0, 0.5),
                         ZIndex = 5,
@@ -3622,7 +3610,7 @@ local Workspace = game:GetService('Workspace');
                 }
 
                 local Debounce = false 
-                local RenderStepped
+                local PreRender
 
                 function Dropdown:SetOpen(Bool)
                     if Debounce then 
@@ -3637,14 +3625,14 @@ local Workspace = game:GetService('Workspace');
                     if Bool then 
                         DropdownItems["OptionHolder"].Instance.Visible = true
 
-                        RenderStepped = RunService.RenderStepped:Connect(function()
+                        PreRender = RunService.PreRender:Connect(function()
                             DropdownItems["OptionHolder"].Instance.Position = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsolutePosition.X, 0,  DropdownItems["RealDropdown"].Instance.AbsolutePosition.Y + DropdownItems["RealDropdown"].Instance.AbsoluteSize.Y + 5)
                             DropdownItems["OptionHolder"].Instance.Size = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsoluteSize.X, 0, 85)
                         end)
                     else
-                        if RenderStepped then
-                            RenderStepped:Disconnect()
-                            RenderStepped = nil
+                        if PreRender then
+                            PreRender:Disconnect()
+                            PreRender = nil
                         end
                     end
 
@@ -3692,7 +3680,7 @@ local Workspace = game:GetService('Workspace');
                     ToggleItems["Toggle"] = Instances:Create("TextButton", {
                         Parent = Items["KeybindWindow"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -3709,7 +3697,7 @@ local Workspace = game:GetService('Workspace');
                     ToggleItems["Text"] = Instances:Create("TextLabel", {
                         Parent = ToggleItems["Toggle"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         TextTransparency = 0.5,
                         Text = "show in keybind list",
@@ -4167,7 +4155,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Notification"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Notification.Name,
@@ -4183,7 +4171,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Description"] = Instances:Create("TextLabel", {
                     Parent = Items["Notification"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = Notification.Description,
@@ -4312,7 +4300,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Watermark"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Text,
@@ -4394,7 +4382,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["KeybindsList"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "keybinds",
@@ -4439,7 +4427,7 @@ local Workspace = game:GetService('Workspace');
                 local NewKey = Instances:Create("TextLabel", {
                     Parent = Items["Content"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = "(" .. Key .. ") - ".. Name .. "",
@@ -4456,7 +4444,7 @@ local Workspace = game:GetService('Workspace');
                 local NewKeyStatus = Instances:Create("TextLabel", {
                     Parent = NewKey.Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = "off",
@@ -4521,7 +4509,7 @@ local Workspace = game:GetService('Workspace');
                 Logo = Data.Logo or Data.logo or "135215559087473",
                 FadeSpeed = Data.FadeSpeed or Data.fadespeed or 0.2,
                 Version = Data.Version or Data.version or "v1.0.0 alpha",
-                Size = not IsMobile and UDim2New(0, 659, 0, 511) or UDim2New(0, 511, 0, 459),
+                Size = UDim2New(0, 659, 0, 511),
 
                 Pages = { },
                 SubPages = { },
@@ -4685,7 +4673,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     AnchorPoint = Vector2New(0, 0.5),
                     ZIndex = 2,
                     TextSize = 14,
@@ -4724,7 +4712,7 @@ local Workspace = game:GetService('Workspace');
                 Items["VersionText"] = Instances:Create("TextLabel", {
                     Parent = Items["Version"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.5,
                     Text = Window.Version,
@@ -4759,53 +4747,6 @@ local Workspace = game:GetService('Workspace');
                     Name = "\0",
                     PaddingRight = UDimNew(0, 0)
                 })
-
-                Items["CloseButton"] = Instances:Create("ImageButton", {
-                    Parent = Items["Topbar"].Instance,
-                    Name = "\0",
-                    ScaleType = Enum.ScaleType.Fit,
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 17, 0, 17),
-                    AutoButtonColor = false,
-                    AnchorPoint = Vector2New(1, 0.5),
-                    Image = "rbxassetid://76001605964586",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(1, -7, 0.5, 0),
-                    ZIndex = 2,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["CloseButton"]:AddToTheme({ImageColor3 = "Image"})
-
-                Items["MinimizeButton"] = Instances:Create("ImageButton", {
-                    Parent = Items["Topbar"].Instance,
-                    Name = "\0",
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 17, 0, 17),
-                    AutoButtonColor = false,
-                    AnchorPoint = Vector2New(1, 0.5),
-                    Image = "rbxassetid://94817928404736",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(1, -27, 0.5, -5),
-                    ZIndex = 2,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["MinimizeButton"]:AddToTheme({ImageColor3 = "Image"})
-
-                Items["UnMinimizeButton"] = Instances:Create("ImageButton", {
-                    Parent = Items["Topbar"].Instance,
-                    Name = "\0",
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 17, 0, 17),
-                    ImageTransparency = 1,
-                    AutoButtonColor = false,
-                    AnchorPoint = Vector2New(1, 0.5),
-                    Image = "rbxassetid://77419631183448",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(1, -27, 0.5, 0),
-                    ZIndex = 2,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["UnMinimizeButton"]:AddToTheme({ImageColor3 = "Image"})
 
                 Instances:Create("UIStroke", {
                     Parent = Items["MainFrame"].Instance,
@@ -4881,7 +4822,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Input"] = Instances:Create("TextBox", {
                     Parent = Items["Search"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     AnchorPoint = Vector2New(0, 0.5),
                     PlaceholderColor3 = FromRGB(185, 185, 185),
                     PlaceholderText = "Search",
@@ -4900,48 +4841,6 @@ local Workspace = game:GetService('Workspace');
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })  Items["Input"]:AddToTheme({TextColor3 = "Text", PlaceholderColor3 = "Inactive Text"})
 
-                if IsMobile then 
-                    Items["FloatingButton"] = Instances:Create("TextButton", {
-                        Parent = Library.Holder.Instance,
-                        Text = "",
-                        AutoButtonColor = false,
-                        Name = "\0",
-                        Position = UDim2New(0, 125, 0, 125),
-                        BorderColor3 = FromRGB(0, 0, 0),
-                        Size = UDim2New(0, 50, 0, 50),
-                        BorderSizePixel = 0,
-                        ZIndex = 127,
-                        BackgroundColor3 = Library.Theme.Background
-                    })  Items["FloatingButton"]:AddToTheme({BackgroundColor3 = "Background"})
-
-                    Items["FloatingButton"]:MakeDraggable()
-
-                    Instances:Create("ImageLabel", {
-                        Parent = Items["FloatingButton"].Instance,
-                        BorderColor3 = FromRGB(0, 0, 0),
-                        Name = "\0",
-                        Image = "rbxassetid://" .. Window.Logo,
-                        BackgroundTransparency = 1,
-                        AnchorPoint = Vector2New(0.5, 0.5),
-                        Position = UDim2New(0.5, 0, 0.5, 0),
-                        ZIndex = 127,
-                        Size = UDim2New(1, -25, 1, -25),
-                        BorderSizePixel = 0,
-                        BackgroundColor3 = FromRGB(255, 255, 255)
-                    })
-
-                    Instances:Create("UICorner", {
-                        Parent = Items["FloatingButton"].Instance,
-                        CornerRadius = UDimNew(1, 0)
-                    }) 
-
-                    Items["FloatingButton"]:Connect("InputBegan", function(Input)
-                        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
-                            Window:SetOpen(not Window.IsOpen)
-                        end
-                    end)
-                end
-
                 UserInputService.MouseIconEnabled = false
 
                 Items["MouseImage"] = Instances:Create("ImageLabel", {
@@ -4958,7 +4857,7 @@ local Workspace = game:GetService('Workspace');
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })  Items["MouseImage"]:AddToTheme({ImageColor3 = "Accent"})
 
-                Library:Connect(RunService.RenderStepped, function()
+                Library:Connect(RunService.PreRender, function()
                     local MouseLocation = UserInputService:GetMouseLocation() 
                     Items["MouseImage"].Instance.Position = UDim2New(0, MouseLocation.X - 1, 0, MouseLocation.Y - 56)
                 end)
@@ -5042,7 +4941,7 @@ local Workspace = game:GetService('Workspace');
                 end
             end)
 
-            local RenderStepped
+            local PreRender
 
             Items["Input"]:Connect("Focused", function()
                 local PageSearchData = Library.SearchItems[Library.CurrentPage]
@@ -5051,7 +4950,7 @@ local Workspace = game:GetService('Workspace');
                     return 
                 end
 
-                RenderStepped = RunService.RenderStepped:Connect(function()
+                PreRender = RunService.PreRender:Connect(function()
                     for Index, Value in PageSearchData do 
                         local Name = Value.Name
                         local Element = Value.Item
@@ -5075,45 +4974,10 @@ local Workspace = game:GetService('Workspace');
             end)
 
             Items["Input"]:Connect("FocusLost", function()
-                if RenderStepped then 
-                    RenderStepped:Disconnect()
-                    RenderStepped = nil
+                if PreRender then 
+                    PreRender:Disconnect()
+                    PreRender = nil
                 end
-            end)
-            
-            local OldSize = Items["MainFrame"].Instance.AbsoluteSize
-            local ContentFrame = Items["Content"].Instance
-
-            Items["UnMinimizeButton"].Instance.ImageTransparency = 1
-            Items["MinimizeButton"].Instance.ImageTransparency = 0
-
-            Items["MinimizeButton"]:Connect("MouseButton1Down", function()
-                OldSize = Items["MainFrame"].Instance.AbsoluteSize
-                ContentFrame.Visible = false
-                
-                Items["MainFrame"]:Tween(nil, {
-                    Size = UDim2New(0, Items["MainFrame"].Instance.Size.X.Offset, 0, 35)
-                })
-                
-                Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 1})
-                Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 0})
-            end)
-
-            Items["UnMinimizeButton"]:Connect("MouseButton1Down", function()
-                ContentFrame.Visible = true
-                
-                Items["MainFrame"]:Tween(nil, {
-                    Size = UDim2New(0, OldSize.X, 0, OldSize.Y)
-                })
-                
-                Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 0})
-                Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 1})
-            end)
-
-            Items["CloseButton"]:Connect("MouseButton1Down", function()
-                Window:SetOpen(false)
-                task.wait(0.1)
-                Library:Unload()
             end)
 
             Window.Items = Items
@@ -5180,7 +5044,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Inactive"] = Instances:Create("TextButton", {
                     Parent = Page.Window.Items["Holder"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -5217,7 +5081,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Inactive"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     Visible = false,
                     Active = true,
                     AnchorPoint = Vector2New(0, 0.5),
@@ -5439,7 +5303,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Inactive"] = Instances:Create("TextButton", {
                     Parent = SubPage.Page.Items["Holder"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -5477,7 +5341,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Inactive"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     Visible = false,
                     Active = true,
                     AnchorPoint = Vector2New(0, 0.5),
@@ -5708,7 +5572,7 @@ local Workspace = game:GetService('Workspace');
                 Items["PlayerUsername"] = Instances:Create("TextLabel", {
                     Parent = Items["Playerlist"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "?",
@@ -5725,7 +5589,7 @@ local Workspace = game:GetService('Workspace');
                 Items["PlayerUserID"] = Instances:Create("TextLabel", {
                     Parent = Items["Playerlist"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "?",
@@ -5742,7 +5606,7 @@ local Workspace = game:GetService('Workspace');
                 Items["PlayerAccountAge"] = Instances:Create("TextLabel", {
                     Parent = Items["Playerlist"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "?",
@@ -5775,7 +5639,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Text"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["Dropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "Status",
@@ -5820,7 +5684,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["Value"] = Instances:Create("TextLabel", {
                         Parent = DropdownItems["RealDropdown"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(255, 255, 255),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "--",
@@ -5855,7 +5719,7 @@ local Workspace = game:GetService('Workspace');
                     DropdownItems["OptionHolder"] = Instances:Create("TextButton", {
                         Parent = Library.Holder.Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -5929,7 +5793,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionButton = Instances:Create("TextButton", {
                         Parent = DropdownItems["OptionHolder"].Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextColor3 = FromRGB(0, 0, 0),
                         BorderColor3 = FromRGB(0, 0, 0),
                         Text = "",
@@ -5969,7 +5833,7 @@ local Workspace = game:GetService('Workspace');
                     local OptionText = Instances:Create("TextLabel", {
                         Parent = OptionButton.Instance,
                         Name = "\0",
-                        Font = "GothamBlack",
+                        Font = "Gotham",
                         TextTransparency = 0.5,
                         AnchorPoint = Vector2New(0, 0.5),
                         ZIndex = 5,
@@ -6059,7 +5923,7 @@ local Workspace = game:GetService('Workspace');
                 end
 
                 local Debounce = false 
-                local RenderStepped
+                local PreRender
 
                 function Dropdown:SetOpen(Bool)
                     if Debounce then 
@@ -6073,14 +5937,14 @@ local Workspace = game:GetService('Workspace');
                     if Bool then 
                         DropdownItems["OptionHolder"].Instance.Visible = true
 
-                        RenderStepped = RunService.RenderStepped:Connect(function()
+                        PreRender = RunService.PreRender:Connect(function()
                             DropdownItems["OptionHolder"].Instance.Position = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsolutePosition.X, 0,  DropdownItems["RealDropdown"].Instance.AbsolutePosition.Y + DropdownItems["RealDropdown"].Instance.AbsoluteSize.Y + 5)
                             DropdownItems["OptionHolder"].Instance.Size = UDim2New(0, DropdownItems["RealDropdown"].Instance.AbsoluteSize.X, 0, 85)
                         end)
                     else
-                        if RenderStepped then
-                            RenderStepped:Disconnect()
-                            RenderStepped = nil
+                        if PreRender then
+                            PreRender:Disconnect()
+                            PreRender = nil
                         end
                     end
 
@@ -6181,7 +6045,7 @@ local Workspace = game:GetService('Workspace');
                 PlayerItems["NewPlayer"] = Instances:Create("TextButton", {
                     Parent = Items["PlayerHolder"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -6203,7 +6067,7 @@ local Workspace = game:GetService('Workspace');
                 PlayerItems["Name"] = Instances:Create("TextLabel", {
                     Parent = PlayerItems["NewPlayer"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     TextTransparency = 0.4000000059604645,
                                         ZIndex = 2,
@@ -6223,7 +6087,7 @@ local Workspace = game:GetService('Workspace');
                 PlayerItems["Status"] = Instances:Create("TextLabel", {
                     Parent = PlayerItems["NewPlayer"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                                         ZIndex = 2,
                     TextTransparency = 0.4000000059604645,
@@ -6246,7 +6110,7 @@ local Workspace = game:GetService('Workspace');
                 PlayerItems["Team"] = Instances:Create("TextLabel", {
                     Parent = PlayerItems["NewPlayer"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = TeamColor,
                     TextTransparency = 0.4000000059604645,
                     Text = Team,
@@ -6468,7 +6332,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Title"] = Instances:Create("TextLabel", {
                     Parent = Items["Topbar"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Section.Name,
@@ -6666,7 +6530,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Button"] = Instances:Create("TextButton", {
                     Parent = Button.Section.Items["Content"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -6706,7 +6570,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Button"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Button.Name,
@@ -6791,7 +6655,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Slider"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Slider.Name,
@@ -6869,7 +6733,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Value"] = Instances:Create("TextLabel", {
                     Parent = Items["Slider"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = "",
@@ -7058,7 +6922,7 @@ local Workspace = game:GetService('Workspace');
 
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Label"].Instance,
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     ZIndex = 2,
@@ -7223,7 +7087,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Textbox"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Text = Textbox.Name,
@@ -7272,7 +7136,7 @@ local Workspace = game:GetService('Workspace');
                 Items["Input"] = Instances:Create("TextBox", {
                     Parent = Items["Background"].Instance,
                     Name = "\0",
-                    Font = "GothamBlack",
+                    Font = "Gotham",
                     CursorPosition = -1,
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
