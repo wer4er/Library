@@ -831,11 +831,11 @@ local Workspace = game:GetService('Workspace');
             end
         end
 
-        CustomFont:New("JetBrainsMono", 700, "Regular", {
+        CustomFont:New("JetBrainsMono_Bold", 700, "Regular", {
             Url = "https://github.com/wer4er/Fonts/raw/refs/heads/main/JetBrainsMono-Bold.ttf"
         })
 
-        Library.Font = CustomFont:Get("JetBrainsMono")
+        Library.Font = CustomFont:Get("JetBrainsMono_Bold")
     end
 
     local Themes = {
