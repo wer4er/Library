@@ -1,4 +1,10 @@
 --[[
+    kiwisense
+    Made by samet
+
+    assign different flags to each element to prevent from configs overriding eachother
+    example is at the bottom
+
     documentation:
 
     function Library:Window(Data: table
@@ -5075,22 +5081,33 @@ local Workspace = game:GetService('Workspace');
                 end
             end)
             
-            local IsMinimized = false
             local OldSize = Items["MainFrame"].Instance.AbsoluteSize
+            local ContentFrame = Items["Content"].Instance
+
+            Items["UnMinimizeButton"].Instance.ImageTransparency = 1
+            Items["MinimizeButton"].Instance.ImageTransparency = 0
 
             Items["MinimizeButton"]:Connect("MouseButton1Down", function()
-                IsMinimized = not IsMinimized
+                OldSize = Items["MainFrame"].Instance.AbsoluteSize
+                ContentFrame.Visible = false
+                
+                Items["MainFrame"]:Tween(nil, {
+                    Size = UDim2New(0, Items["MainFrame"].Instance.Size.X.Offset, 0, 35)
+                })
+                
+                Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 1})
+                Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 0})
+            end)
 
-                if IsMinimized then
-                    OldSize = Items["MainFrame"].Instance.AbsoluteSize
-                    Items["MainFrame"]:Tween(nil, {Size = UDim2New(0, Items["MainFrame"].Instance.Size.X.Offset, 0, 35)})
-                    Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 1})
-                    Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 0})
-                else
-                    Items["MainFrame"]:Tween(nil, {Size = UDim2New(0, Items["MainFrame"].Instance.Size.X.Offset, 0, OldSize.Y)})
-                    Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 0})
-                    Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 1})
-                end
+            Items["UnMinimizeButton"]:Connect("MouseButton1Down", function()
+                ContentFrame.Visible = true
+                
+                Items["MainFrame"]:Tween(nil, {
+                    Size = UDim2New(0, OldSize.X, 0, OldSize.Y)
+                })
+                
+                Items["MinimizeButton"]:Tween(nil, {ImageTransparency = 0})
+                Items["UnMinimizeButton"]:Tween(nil, {ImageTransparency = 1})
             end)
 
             Items["CloseButton"]:Connect("MouseButton1Down", function()
