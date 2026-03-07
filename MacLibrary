@@ -1042,7 +1042,7 @@ function MacLibrary:Window(Settings)
 	GlobalSettingsUIScale.Scale = 1e-07
 	GlobalSettingsUIScale.Parent = GlobalSettings
 	GlobalSettings.Parent = Base
-	Base.Parent = MacLibrary
+	Base.Parent = MacLib
 
 	function WindowFunctions:UpdateTitle(NewTitle)
 		Title.Text = NewTitle
