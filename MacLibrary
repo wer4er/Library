@@ -94,7 +94,7 @@ end
 
 function MacLibrary:Watermark(Settings)
 	local WatermarkFunctions = {}
-local Stats = game:GetService('Stats');
+	local Stats = game:GetService('Stats');
 	
 	local DisplayTitle = Settings.Title or "Z3X"
 
@@ -211,7 +211,7 @@ function MacLibrary:Window(Settings)
 		AcrylicBlur = true
 	end
 
-	local MacLibrary = GetGui()
+	local MacLib = GetGui()
 
 	local Notifications = Instance.new("Frame")
 	Notifications.Name = "Notifications"
@@ -220,7 +220,7 @@ function MacLibrary:Window(Settings)
 	Notifications.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Notifications.BorderSizePixel = 0
 	Notifications.Size = UDim2.fromScale(1, 1)
-	Notifications.Parent = MacLibrary
+	Notifications.Parent = MacLib
 	Notifications.ZIndex = 2
 
 	local NotificationsUIListLayout = Instance.new("UIListLayout")
